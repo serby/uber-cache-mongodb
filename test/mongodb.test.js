@@ -1,11 +1,12 @@
 var Db = require('mongodb').Db
   , Server = require('mongodb').Server
   , serverData
+  , UberCacheMongoDb = require('..')
 
 describe('uber-cache-mongodb', function() {
 
-  serverData = new Server('localhost', 27017,
-    { 'auto_reconnect': true })
+  serverData = new Server('localhost', 27017
+    , { 'auto_reconnect': true })
 
   var db = new Db('uber-cache-test', serverData, { fsync: true, w: 1 })
     , engine
@@ -19,15 +20,18 @@ describe('uber-cache-mongodb', function() {
     })
   })
 
-  beforeEach(function (done) {
-    engine = require('..')(conn, { collection: 'uc' + i++ })
-    engine.clear(function() {
-      done()
-    })
+  beforeEach(function () {
+    engine = new UberCacheMongoDb(conn, { collectionName: 'uc' + i++ })
   })
 
-  require('uber-cache/test/engine')('mongodb-engine', function() {
+  afterEach(function (done) {
+    engine.clear(done)
+  })
+
+  require('uber-cache/test/conformance-test')('uber-cache-mongodb', function() {
     return engine
   })
+
+  after(db.dropDatabase.bind(db))
 
 })
