@@ -5,8 +5,7 @@ var Db = require('mongodb').Db
 
 describe('uber-cache-mongodb', function() {
 
-  serverData = new Server('localhost', 27017
-    , { 'auto_reconnect': true })
+  serverData = new Server('localhost', 27017 , { 'auto_reconnect': true })
 
   var db = new Db('uber-cache-test', serverData, { fsync: true, w: 1 })
     , engine
