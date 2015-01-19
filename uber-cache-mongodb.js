@@ -7,7 +7,9 @@ var EventEmitter = require('events').EventEmitter
 
 function UberCacheMongoDb(db, options) {
   this.options = extend(
-    { collectionName: 'ubercache' }
+    { collectionName: 'ubercache'
+    , size: 5000
+    }
     , options)
 
   this.collection = db.collection(this.options.collectionName)
@@ -18,12 +20,28 @@ UberCacheMongoDb.prototype = Object.create(EventEmitter.prototype)
 function setCache(key, value, ttl, callback) {
   if (ttl) ttl += Date.now()
   this.collection.update({ _id: key }
-    , { _id: key, ttl: ttl, data: value }
+    , { _id: key, ttl: ttl, data: value, updated: new Date() }
     , { upsert: true }, function(err) {
       if (typeof callback === 'function') {
         callback(err, value)
       }
     })
+}
+
+UberCacheMongoDb.prototype.gc = function() {
+  this.collection.remove({ ttl: { $lt: Date.now() } }, function(err) {
+    if (err) return false // Log error somehow
+      this.collection.count({}, function(err, count) {
+        if (count > this.options.size) {
+          this.collection.find({}, { key: 1}, { sort: { updated: -1 }, limit: 1, skip: this.options.size }
+            , function(err, results) {
+              this.collection.remove({ updated: { $lt: results[0].updated } }, function() {
+
+              })
+            })
+        }
+      }
+  })
 }
 
 UberCacheMongoDb.prototype.set = function(key, value, ttl, callback) {
