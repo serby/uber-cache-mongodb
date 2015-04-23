@@ -8,6 +8,9 @@ Thumbs.db
 *.un~i
 tags
 
+# Idea
+.idea
+
 # OsX
 .DS_Store
 Icon?

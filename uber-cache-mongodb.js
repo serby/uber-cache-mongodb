@@ -7,9 +7,9 @@ var EventEmitter = require('events').EventEmitter
 
 function UberCacheMongoDb(db, options) {
   this.options = extend(
-    { collectionName: 'ubercache'
-    , size: 5000
-    }
+      { collectionName: 'ubercache'
+      , size: 5000
+      }
     , options)
 
   this.collection = db.collection(this.options.collectionName)
@@ -40,7 +40,7 @@ UberCacheMongoDb.prototype.gc = function() {
               })
             })
         }
-      }
+      })
   })
 }
 
