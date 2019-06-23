@@ -2,7 +2,7 @@
 
 See http://github.com/serby/uber-cache for more details
 
-[![build status](https://secure.travis-ci.org/serby/uber-cache-mongodb.png)](http://travis-ci.org/serby/uber-cache-mongodb)
+[![build status](https://secure.travis-ci.org/serby/uber-cache-mongodb.png)](http://travis-ci.org/serby/uber-cache-mongodb) [![Greenkeeper badge](https://badges.greenkeeper.io/serby/uber-cache-mongodb.svg)](https://greenkeeper.io/)
 
 ## Installation
 
